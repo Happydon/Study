@@ -1,25 +1,27 @@
 package external;
 
-import java.util.Stack;
-
 public class ValidBrackets {
     public static String showValidBrackets(String input) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(-1);
-        int ans = 0;
-        int lastSymbol = 0;
-        for (int i = 0; i < input.length(); i++)
-            if (input.charAt(i) == '(') {
-                stack.push(i);
-            } else {
-                stack.pop();
-                if (stack.isEmpty()) {
-                    stack.push(i);
-                } else {
-                    ans = Math.max(ans, i - stack.peek());
-                    lastSymbol = i + 1 ;
+        String ans = "";
+        int[] dp = new int[input.length()];
+        for (int i = 1; i < input.length(); i++) {
+            if (input.charAt(i) == ')') {
+                if (input.charAt(i - 1) == '(') {
+                    dp[i] = (i >= 2 ? dp[i - 2] : 0) + 2;
+                } else if (i - dp[i - 1] > 0 && input.charAt(i - dp[i - 1] - 1) == '(') {
+                    dp[i] = dp[i - 1] + ((i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0) + 2;
                 }
             }
-        return ans != 0? ans + " - " + input.substring(lastSymbol - ans ,lastSymbol) : String.valueOf(ans);
+        }
+        int current = 0;
+        for (int j = dp.length - 1; j >0; j--){
+            if (current > 0) {
+                current--;
+            } else if (dp[j] > 0){
+                ans = input.substring(j - dp[j] + 1,j + 1) + ans;
+                current = dp[j];
+            }
+        }
+        return  ans.length() > 0 ? ans.length() + " - " + ans : String.valueOf(ans.length());
     }
 }
