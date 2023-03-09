@@ -39,4 +39,19 @@ public class ValidBracketsTest {
         String expect = "0";
         assertThat(result, is(expect));
     }
+
+    @Test
+    public void showValidBracketsCase5() {
+        String input = "()(()(((())";
+        String result = showValidBrackets(input);
+        String expect = "8 - ()()(())";
+        assertThat(result, is(expect));
+    }
+    @Test
+    public void showValidBracketsCase6() {
+        String input = "(())))())()";
+        String result = showValidBrackets(input);
+        String expect = "8 - (())()()";
+        assertThat(result, is(expect));
+    }
 }
